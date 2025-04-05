@@ -27,14 +27,14 @@
     // Nodes with tags extracted from Obsidian notes (for demonstration)
     const nodes = [
       { id: 'yair', label: 'Yair Netanyahu', url: 'people/yair-netanyahu.html', tags: ['bibihive', 'son'] },
-      { id: 'qatar', label: 'Qatar', url: 'companies/qatar.html', tags: ['qatar'] },
+      { id: 'qatar', label: 'Qatar', url: '', tags: ['qatar'] },
       { id: 'bibi', label: 'Bibi Netanyahu', url: 'people/bibi.html', tags: ['bibihive'] },
       { id: 'shrulik', label: 'Yisrael (Srulik) Einhorn', url: 'people/shrulik.html', tags: ['advisor', 'bibihive'] },
       { id: 'urich', label: 'Yonatan Urich', url: 'people/urich.html', tags: ['advisor', 'bibihive'] },
       { id: 'feldstein', label: 'Eli Feldstein', url: 'people/feldstein.html', tags: ['advisor', 'bibihive'] },
       { id: 'footlik', label: 'Jay Footlik', url: 'people/footlik.html', tags: ['lobby', 'qatar'] },
       { id: 'birger', label: 'Gil Birger', url: 'people/birger.html', tags: ['lobby'] },
-	  { id: 'klein', label: 'Zvika Klein', url: 'people/klein.html', tags: ['media'] }
+      { id: 'klein', label: 'Zvika Klein', url: 'people/klein.html', tags: ['media'] }
     ];
 
     const links = [
@@ -64,7 +64,7 @@
     const simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links).id(d => d.id).distance(150))
       .force('charge', d3.forceManyBody().strength(-500))
-	  .force('collide', d3.forceCollide().radius(40)) // prevent overlap
+      .force('collide', d3.forceCollide().radius(40)) // prevent overlap
       .force('center', d3.forceCenter(width / 2, height / 2));
 
     // Link setup
@@ -85,7 +85,9 @@
       .attr('r', 20)
       .attr('fill', d => getColorByTags(d.tags))  // Get color based on tags
       .on('click', function(event, d) {
-        window.location.href = d.url;
+	if (d.url && d.url !== "" && d.id !== "Qatar") {
+		window.location.href = d.url;
+		}
       });
 
     // Add labels
