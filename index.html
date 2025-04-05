@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qatargate Network</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #graph {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <svg id="graph"></svg>
+  <script>
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // Nodes with tags extracted from Obsidian notes (for demonstration)
+    const nodes = [
+      { id: 'yair', label: 'Yair Netanyahu', url: 'people/yair-netanyahu.html', tags: ['bibihive', 'son'] },
+      { id: 'qatar', label: 'Qatar', url: 'companies/qatar.html', tags: ['qatar'] },
+      { id: 'bibi', label: 'Bibi Netanyahu', url: 'people/bibi.html', tags: ['bibihive'] },
+      { id: 'shrulik', label: 'Yisrael (Srulik) Einhorn', url: 'people/shrulik.html', tags: ['advisor', 'bibihive'] },
+      { id: 'urich', label: 'Yonatan Urich', url: 'people/urich.html', tags: ['advisor', 'bibihive'] },
+      { id: 'feldstein', label: 'Eli Feldstein', url: 'people/feldstein.html', tags: ['advisor', 'bibihive'] },
+      { id: 'footlik', label: 'Jay Footlik', url: 'people/footlik.html', tags: ['lobby', 'qatar'] },
+      { id: 'birger', label: 'Gil Birger', url: 'people/birger.html', tags: ['lobby'] },
+	  { id: 'klein', label: 'Zvika Klein', url: 'people/klein.html', tags: ['media'] }
+    ];
+
+    const links = [
+      { source: 'bibi', target: 'yair', label: 'Father' },
+      { source: 'bibi', target: 'shrulik', label: 'Advisor' },
+      { source: 'bibi', target: 'urich', label: 'Advisor' },
+      { source: 'bibi', target: 'feldstein', label: 'PM Spokesperson' },
+      { source: 'qatar', target: 'shrulik', label: 'PR' },
+      { source: 'qatar', target: 'urich', label: 'PR' },
+      { source: 'qatar', target: 'footlik', label: 'Lobby' },
+      { source: 'footlik', target: 'birger', label: 'Money Transfer' },
+      { source: 'birger', target: 'feldstein', label: 'Payment' },
+	  { source: 'shrulik', target: 'klein', label: 'PR' },
+	  { source: 'klein', target: 'feldstein', label: 'PR' },
+	  { source: 'footlik', target: 'klein', label: 'PR' },
+	  { source: 'yair', target: 'shrulik', label: 'friends' },
+	  { source: 'yair', target: 'urich', label: 'friends' }
+
+    ];
+
+    const svg = d3.select('#graph')
+      .attr('width', width)
+      .attr('height', height);
+	 
+
+    // Simulation setup
+    const simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+      .force('charge', d3.forceManyBody().strength(-500))
+	  .force('collide', d3.forceCollide().radius(40)) // prevent overlap
+      .force('center', d3.forceCenter(width / 2, height / 2));
+
+    // Link setup
+    const link = svg.append('g')
+      .selectAll('.link')
+      .data(links)
+      .enter().append('line')
+      .attr('class', 'link')
+      .attr('stroke', '#888')
+      .attr('stroke-width', 2);
+
+    // Node setup
+    const node = svg.append('g')
+      .selectAll('.node')
+      .data(nodes)
+      .enter().append('circle')
+      .attr('class', 'node')
+      .attr('r', 20)
+      .attr('fill', d => getColorByTags(d.tags))  // Get color based on tags
+      .on('click', function(event, d) {
+        window.location.href = d.url;
+      });
+
+    // Add labels
+    const text = svg.append('g')
+      .selectAll('.text')
+      .data(nodes)
+      .enter().append('text')
+      .attr('class', 'text')
+      .attr('dx', 25)
+      .attr('dy', 5)
+      .text(d => d.label);
+
+    // Simulation tick update
+    simulation.on('tick', function() {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+
+      node
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y);
+
+      text
+        .attr('x', d => d.x)
+        .attr('y', d => d.y);
+    });
+
+    // Function to get color based on tags
+    function getColorByTags(tags) {
+      if (tags && tags.includes('bibihive')) {
+        return '#0000FF'; // Blue
+      } else if (tags && tags.includes('qatar')) {
+        return '#8A1538'; // Maroon
+      } else {
+        return '#333'; // Dark Grey for no tags
+      }
+    }
+  </script>
+</body>
+</html>
