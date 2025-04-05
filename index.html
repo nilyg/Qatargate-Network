@@ -12,17 +12,34 @@
       padding: 0;
     }
     #graph {
-      width: 100vw;
+      width: 100%;
       height: 100vh;
       display: block;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
     }
   </style>
 </head>
 <body>
   <svg id="graph"></svg>
   <script>
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // Set up responsive dimensions
+    const setDimensions = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      return { width, height };
+    };
+
+    // Initialize dimensions
+    let { width, height } = setDimensions();
+
+    // Create the SVG element
+    const svg = d3.select('#graph')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .classed('svg-content-responsive', true);
 
     // Nodes with tags extracted from Obsidian notes (for demonstration)
     const nodes = [
@@ -47,18 +64,12 @@
       { source: 'qatar', target: 'footlik', label: 'Lobby' },
       { source: 'footlik', target: 'birger', label: 'Money Transfer' },
       { source: 'birger', target: 'feldstein', label: 'Payment' },
-	  { source: 'shrulik', target: 'klein', label: 'PR' },
-	  { source: 'klein', target: 'feldstein', label: 'PR' },
-	  { source: 'footlik', target: 'klein', label: 'PR' },
-	  { source: 'yair', target: 'shrulik', label: 'friends' },
-	  { source: 'yair', target: 'urich', label: 'friends' }
-
+      { source: 'shrulik', target: 'klein', label: 'PR' },
+      { source: 'klein', target: 'feldstein', label: 'PR' },
+      { source: 'footlik', target: 'klein', label: 'PR' },
+      { source: 'yair', target: 'shrulik', label: 'friends' },
+      { source: 'yair', target: 'urich', label: 'friends' }
     ];
-
-    const svg = d3.select('#graph')
-      .attr('width', width)
-      .attr('height', height);
-	 
 
     // Simulation setup
     const simulation = d3.forceSimulation(nodes)
@@ -85,9 +96,9 @@
       .attr('r', 20)
       .attr('fill', d => getColorByTags(d.tags))  // Get color based on tags
       .on('click', function(event, d) {
-	if (d.url && d.url !== "" && d.id !== "Qatar") {
-		window.location.href = d.url;
-		}
+        if (d.url && d.url !== "" && d.id !== "qatar") {
+          window.location.href = d.url;
+        }
       });
 
     // Add labels
@@ -127,6 +138,13 @@
         return '#333'; // Dark Grey for no tags
       }
     }
+
+    // Update dimensions on window resize
+    window.onresize = function() {
+      const { width, height } = setDimensions();
+      simulation.force('center', d3.forceCenter(width / 2, height / 2));
+      svg.attr('viewBox', `0 0 ${width} ${height}`);
+    };
   </script>
 </body>
 </html>
