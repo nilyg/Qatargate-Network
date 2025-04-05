@@ -41,6 +41,16 @@
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .classed('svg-content-responsive', true);
 
+    // Define the zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.5, 5])  // Set min and max zoom scale
+      .on('zoom', (event) => {
+        svg.select('g').attr('transform', event.transform);  // Apply zoom transform to both links and nodes
+      });
+
+    // Apply zoom behavior to the SVG
+    svg.call(zoom);
+
     // Nodes with tags extracted from Obsidian notes (for demonstration)
     const nodes = [
       { id: 'yair', label: 'Yair Netanyahu', url: 'people/yair-netanyahu.html', tags: ['bibihive', 'son'] },
@@ -71,15 +81,11 @@
       { source: 'yair', target: 'urich', label: 'friends' }
     ];
 
-    // Simulation setup
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(150))
-      .force('charge', d3.forceManyBody().strength(-500))
-      .force('collide', d3.forceCollide().radius(40)) // prevent overlap
-      .force('center', d3.forceCenter(width / 2, height / 2));
+    // Create a group to contain both links, nodes, and labels (so they move together)
+    const graphGroup = svg.append('g');
 
     // Link setup
-    const link = svg.append('g')
+    const link = graphGroup.append('g')
       .selectAll('.link')
       .data(links)
       .enter().append('line')
@@ -88,7 +94,7 @@
       .attr('stroke-width', 2);
 
     // Node setup
-    const node = svg.append('g')
+    const node = graphGroup.append('g')
       .selectAll('.node')
       .data(nodes)
       .enter().append('circle')
@@ -102,7 +108,7 @@
       });
 
     // Add labels
-    const text = svg.append('g')
+    const text = graphGroup.append('g')
       .selectAll('.text')
       .data(nodes)
       .enter().append('text')
@@ -110,6 +116,13 @@
       .attr('dx', 25)
       .attr('dy', 5)
       .text(d => d.label);
+
+    // Simulation setup
+    const simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+      .force('charge', d3.forceManyBody().strength(-500))
+      .force('collide', d3.forceCollide().radius(40)) // prevent overlap
+      .force('center', d3.forceCenter(width / 2, height / 2));
 
     // Simulation tick update
     simulation.on('tick', function() {
@@ -142,8 +155,8 @@
     // Update dimensions on window resize
     window.onresize = function() {
       const { width, height } = setDimensions();
-      simulation.force('center', d3.forceCenter(width / 2, height / 2));
       svg.attr('viewBox', `0 0 ${width} ${height}`);
+      simulation.force('center', d3.forceCenter(width / 2, height / 2));
     };
   </script>
 </body>
