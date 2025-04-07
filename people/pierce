@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brock Pierce</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+    a { color: #0074D9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h2 { margin-top: 2em; }
+    ul { padding-left: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Brock Pierce</h1>
+
+  <h2>🆔 Basic Info</h2>
+  <ul>
+    <li><strong>Full Name:</strong> Brock Pierce</li>
+    <li><strong>Nationality:</strong> US</li>
+    <li>Bitcoin billionaire. </li>
+
+	<li><strong>Connections with Netanyahu:</strong>
+	<li>Friend of <a href="yair-netanyahu.html">Yair Netanyahu</a></li>
+	<li>Member of the advisory board of <a href="https://www.financemagnates.com/cryptocurrency/news/eos-brock-pierce-joins-bancor-protocol-advisory-board/" target="_blank">Bancor</a> - a cryptocurrency platform founded by Guy and Gila Ben-Artzi (Yair Netanyahu's cousins) and Eyal Herzog.</li>
+	<li>In April 2023, Yair Netanyahu stayed at Pierce's villa in Puerto Rico. <a href="https://www.haaretz.co.il/news/politi/2023-04-16/ty-article/.premium/00000187-8b3f-dc6c-a5ff-ef7f14620000" target="_blank">source</a>.</li>
+  </ul>
+
+
+  <p><a href="../index.html">← Back to Network</a></p>
+</body>
+</html>
