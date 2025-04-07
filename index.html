@@ -61,7 +61,9 @@
       { id: 'feldstein', label: 'Eli Feldstein', url: 'people/feldstein.html', tags: ['advisor', 'bibihive'] },
       { id: 'footlik', label: 'Jay Footlik', url: 'people/footlik.html', tags: ['lobby', 'qatar'] },
       { id: 'birger', label: 'Gil Birger', url: 'people/birger.html', tags: ['lobby'] },
-      { id: 'klein', label: 'Zvika Klein', url: 'people/klein.html', tags: ['media'] }
+      { id: 'klein', label: 'Zvika Klein', url: 'people/klein.html', tags: ['media'] },
+	  { id: 'shafir', label: 'Ariel Shafir', url: 'people/shafir.html', tags: ['lobby'] },
+	  { id: 'pierce', label: 'Brock Pierce', url: 'people/pierce.html', tags: ['billionaire'] }
     ];
 
     const links = [
@@ -78,7 +80,11 @@
       { source: 'klein', target: 'feldstein', label: 'PR' },
       { source: 'footlik', target: 'klein', label: 'PR' },
       { source: 'yair', target: 'shrulik', label: 'friends' },
-      { source: 'yair', target: 'urich', label: 'friends' }
+      { source: 'yair', target: 'urich', label: 'friends' },
+	  { source: 'urich', target: 'shafir', label: 'friends' },
+	  { source: 'footlik', target: 'shafir', label: 'connections' },
+	  { source: 'yair', target: 'pierce', label: 'friends' }
+
     ];
 
     // Create a group to contain both links, nodes, and labels (so they move together)
@@ -106,6 +112,7 @@
           window.location.href = d.url;
         }
       });
+	  
 
     // Add labels
     const text = graphGroup.append('g')
@@ -113,16 +120,50 @@
       .data(nodes)
       .enter().append('text')
       .attr('class', 'text')
-      .attr('dx', 25)
-      .attr('dy', 5)
+      .attr('dx', 0)
+      .attr('dy', 35)
+	  .attr('text-anchor', 'middle')
       .text(d => d.label);
 
+
     // Simulation setup
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(150))
-      .force('charge', d3.forceManyBody().strength(-500))
-      .force('collide', d3.forceCollide().radius(40)) // prevent overlap
-      .force('center', d3.forceCenter(width / 2, height / 2));
+	const simulation = d3.forceSimulation(nodes)
+		.force('link', d3.forceLink(links).id(d => d.id).distance(150))
+		.force('charge', d3.forceManyBody().strength(-500))
+		.force('collide', d3.forceCollide().radius(45))
+		.force('center', d3.forceCenter(width / 2, height / 2))
+		.force('x', d3.forceX().x(d => {
+			if (d.id === 'bibi') return width * 0.2;
+			if (d.id === 'qatar') return width * 0.8;
+			return width / 2;
+		}).strength(d => (d.id === 'bibi' || d.id === 'qatar') ? 1 : 0.1));
+
+node.call(drag(simulation));
+
+function drag(simulation) {
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
+  return d3.drag()
+    .on('start', dragstarted)
+    .on('drag', dragged)
+    .on('end', dragended);
+}
+
 
     // Simulation tick update
     simulation.on('tick', function() {
