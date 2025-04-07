@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ariel Shafir</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+    a { color: #0074D9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h2 { margin-top: 2em; }
+    ul { padding-left: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Ariel Shafir</h1>
+
+  <h2>🆔 Basic Info</h2>
+  <ul>
+    <li><strong>Full Name:</strong> Ariel Shafir</li>
+    <li><strong>Nationality:</strong> Israel</li>
+    <li><strong>Role:</strong> Strategic advisor and lobbyist in <a href="https://idsf.org.il/team-members/ariel-shafir/" target="_blank">IDFS הביטחוניסטים</a>.</li>
+	<li> Worked as strategic consultant in <a href="https://web.archive.org/web/20240302175155/https://www.perception.media/arielshafir" target="_blank">perception</a>.</li>
+	<li> Friend of <a href="urich.html">Yonatan Urich</a>. Organized meetings for <a href="footlik.html">Jay Footlik</a> with Israeli officials.</li>
+	<li> Affiliated with the <a href="https://www.israelispirit.org/en/home" target="_blank">Civil Advocacy Center</a><li>.
+  </ul>
+
+
+  <h2>🔗 Known Connections</h2>
+  <ul>
+    <li><a href="urich.html">Yonatan Urich</a></li>
+    <li><a href="footlik.html">Jay Footlik</a></li>
+
+  </ul>
+
+  <h2>📎 Sources</h2>
+  <ul>
+    <li><a href="https://news.walla.co.il/item/3738586" target="_blank">חברו של אוריך סידר ללוביסטים של קטאר פגישות עם בכירים</a></li>
+  </ul>
+
+  <p><a href="../index.html">← Back to Network</a></p>
+</body>
+</html>
